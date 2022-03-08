@@ -3,7 +3,7 @@ local hsl = lush.hsl
 
 local white  = hsl(199, 88, 91)
 local cold   = hsl(199, 30, 80)
-local soot   = hsl(199, 15, 23)
+local soot   = hsl(199, 35, 38)
 local flame  = hsl(19, 100, 80)
 local ember  = hsl(19, 90, 52)
 local heat   = hsl(8, 88, 52)
@@ -39,11 +39,11 @@ local theme = lush(function()
     -- CursorIM     { }, -- like Cursor, but used when in IME mode |CursorIM|
     CursorColumn { bg=horror }, -- Screen-column at the cursor, when 'cursorcolumn' is set.
     CursorLine   { bg=horror}, -- Screen-line at the cursor, when 'cursorline' is set.  Low-priority if foreground (ctermfg OR guifg) is not set.
-    -- Directory    { }, -- directory names (and other special names in listings)
-    -- DiffAdd      { }, -- diff mode: Added line |diff.txt|
-    -- DiffChange   { }, -- diff mode: Changed line |diff.txt|
-    -- DiffDelete   { }, -- diff mode: Deleted line |diff.txt|
-    -- DiffText     { }, -- diff mode: Changed text within a changed line |diff.txt|
+    Directory    { fg=cold }, -- directory names (and other special names in listings)
+    DiffAdd      { fg=ember, bg=horror }, -- diff mode: Added line |diff.txt|
+    DiffChange   { fg=ember.da(30) }, -- diff mode: Changed line |diff.txt|
+    DiffDelete   { fg=heat}, -- diff mode: Deleted line |diff.txt|
+    DiffText     { }, -- diff mode: Changed text within a changed line |diff.txt|
     -- EndOfBuffer  { }, -- filler lines (~) after the end of the buffer.  By default, this is highlighted like |hl-NonText|.
     -- TermCursor   { }, -- cursor in a focused terminal
     -- TermCursorNC { }, -- cursor in an unfocused terminal
@@ -74,13 +74,12 @@ local theme = lush(function()
     -- SpellCap     { }, -- Word that should start with a capital. |spell| Combined with the highlighting used otherwise.
     -- SpellLocal   { }, -- Word that is recognized by the spellchecker as one that is used in another region. |spell| Combined with the highlighting used otherwise.
     -- SpellRare    { }, -- Word that is recognized by the spellchecker as one that is hardly ever used.  |spell| Combined with the highlighting used otherwise.
-    -- StatusLine   { }, -- status line of current window
-    -- StatusLineNC { }, -- status lines of not-current windows Note: if this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
-    --
-    TabLine      { fg=ember.da(30), bg=horror}, -- tab pages line, not active tab page label
-    TabLineFill  { fg=soot, bg=horror}, -- tab pages line, where there are no labels
-    TabLineSel   { fg=heat, bg=black }, -- tab pages line, active tab page label
-    Title        { fg=heat, gui="bold" }, -- titles for output from ":set all", ":autocmd" etc.
+    StatusLine   { fg=heat, bg=horror}, -- status line of current window
+    StatusLineNC { bg=black, fg=ember.da(50) }, -- status lines of not-current windows Note: if this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
+    TabLine      { bg=horror, fg=soot}, -- tab pages line, not active tab page label
+    TabLineFill  { bg=horror}, -- tab pages line, where there are no labels
+    TabLineSel   { bg=black, fg=ember}, -- tab pages line, active tab page label
+    Title        { }, -- titles for output from ":set all", ":autocmd" etc.
     -- Visual       { }, -- Visual mode selection
     -- VisualNOS    { }, -- Visual mode selection when vim is "Not Owning the Selection".
     -- WarningMsg   { }, -- warning messages
@@ -95,7 +94,7 @@ local theme = lush(function()
 
     Parentheses { fg=black.li(20) },
 
-    Constant       { fg=cold}, -- (preferred) any constant
+    Constant       { fg=heat}, -- (preferred) any constant
     String         { Constant, gui="italic" }, --   a string constant: "this is a string"
     Character      { Constant }, --  a character constant: 'c', '\n'
     Number         { Constant }, --   a number constant: 234, 0xff
@@ -177,9 +176,9 @@ local theme = lush(function()
     DiagnosticFloatingInfo     {Info} , -- Used to color "Info" diagnostic messages in diagnostics float.
     DiagnosticFloatingHint     {Hint} , -- Used to color "Hint" diagnostic messages in diagnostics float.
     DiagnosticSignError        { fg=horror, bg=heat}, -- Used for "Error" signs in sign column.
-    DiagnosticSignWarn         {Warn} , -- Used for "Warn" signs in sign column.
-    DiagnosticSignInfo         {Info} , -- Used for "Info" signs in sign column.
-    DiagnosticSignHint         {Hint} , -- Used for "Hint" signs in sign column.
+    DiagnosticSignWarn         {Warn, bg=horror} , -- Used for "Warn" signs in sign column.
+    DiagnosticSignInfo         {Info, bg=horror} , -- Used for "Info" signs in sign column.
+    DiagnosticSignHint         {Hint, bg=horror} , -- Used for "Hint" signs in sign column.
 
     -- See :h nvim-treesitter-highlights, some groups may not be listed, submit a PR fix to lush-template!
     --
@@ -257,9 +256,6 @@ local theme = lush(function()
     typescriptTypeBracket { Parentheses },
     typescriptIdentifierName { Identifier },
     typescriptProp { fg=heat },
-
-
-    -- markdown
   }
 end)
 
