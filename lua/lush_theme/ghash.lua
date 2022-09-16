@@ -4,93 +4,76 @@ local hsl = lush.hsl
 local white  = hsl(199, 88, 91)
 local cold   = hsl(199, 30, 80)
 local soot   = hsl(199, 35, 38)
-local flame  = hsl(19, 100, 80)
+local flame  = hsl(19, 100, 86)
 local ember  = hsl(19, 90, 52)
-local heat   = hsl(8, 88, 52)
+local soft_ember = ember.da(50)
+local heat   = hsl(8, 78, 45)
 local black  = hsl(19, 88, 9)
 local horror = hsl(199,100,3)
+local flame_subtle = flame.da(40).de(50)
 
--- LSP/Linters mistakenly show `undefined global` errors in the spec, they may
--- support an annotation like the following. Consult your server documentation.
 ---@diagnostic disable: undefined-global
 local theme = lush(function()
-  return {
-    -- The following are all the Neovim default highlight groups from the docs
-    -- as of 0.5.0-nightly-446, to aid your theme creation. Your themes should
-    -- probably style all of these at a bare minimum.
-    --
-    -- Referenced/linked groups must come before being referenced/lined,
-    -- so the order shown ((mostly) alphabetical) is likely
-    -- not the order you will end up with.
-    --
-    -- You can uncomment these and leave them empty to disable any
-    -- styling for that group (meaning they mostly get styled as Normal)
-    -- or leave them commented to apply vims default colouring or linking.
-
-    Normal       { bg=black, fg=flame }, -- normal text
+local warmth = black.li(10)
+return {
+    Normal       { bg=black.da(50), fg=flame }, -- normal text
     NormalFloat  { Normal }, -- Normal text in floating windows.
     NormalNC     { bg=black.da(25) }, -- normal text in non-current windows
 
-    Comment      { fg=ember.da(50) }, -- any comment
+    Comment      { fg=soft_ember }, -- any comment
     ColorColumn  { bg=black.li(2.5)}, -- used for the columns set with 'colorcolumn'
-    Conceal      { fg=black.li(10)}, -- placeholder characters substituted for concealed text (see 'conceallevel')
+    Conceal      { fg=warmth}, -- placeholder characters substituted for concealed text (see 'conceallevel')
     Cursor       { fg=white }, -- character under the cursor
-    -- lCursor      { }, -- the character under the cursor when |language-mapping| is used (see 'guicursor')
-    -- CursorIM     { }, -- like Cursor, but used when in IME mode |CursorIM|
+    lCursor      { fg=white}, -- the character under the cursor when |language-mapping| is used (see 'guicursor')
+    CursorIM     { fg=white}, -- like Cursor, but used when in IME mode |CursorIM|
     CursorColumn { bg=horror }, -- Screen-column at the cursor, when 'cursorcolumn' is set.
-    CursorLine   { bg=horror}, -- Screen-line at the cursor, when 'cursorline' is set.  Low-priority if foreground (ctermfg OR guifg) is not set.
+    CursorLine   { bg=black.da(20)}, -- Screen-line at the cursor, when 'cursorline' is set.  Low-priority if foreground (ctermfg OR guifg) is not set.
     Directory    { fg=cold }, -- directory names (and other special names in listings)
     DiffAdd      { fg=ember, bg=horror }, -- diff mode: Added line |diff.txt|
-    DiffChange   { fg=ember.da(30) }, -- diff mode: Changed line |diff.txt|
-    DiffDelete   { fg=heat}, -- diff mode: Deleted line |diff.txt|
-    DiffText     { }, -- diff mode: Changed text within a changed line |diff.txt|
-    -- EndOfBuffer  { }, -- filler lines (~) after the end of the buffer.  By default, this is highlighted like |hl-NonText|.
-    -- TermCursor   { }, -- cursor in a focused terminal
-    -- TermCursorNC { }, -- cursor in an unfocused terminal
-    -- ErrorMsg     { }, -- error messages on the command line
-    VertSplit    { bg=black, fg=ember }, -- the column separating vertically split windows
-    -- Folded       { }, -- line used for closed folds
-    -- FoldColumn   { }, -- 'foldcolumn'
-    SignColumn   { bg=horror, fg=soot}, -- column where |signs| are displayed
-    -- IncSearch    { }, -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
-    -- Substitute   { }, -- |:substitute| replacement text highlighting
-    LineNr       { fg=ember.da(50) }, -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
-    CursorLineNr { fg=ember.li(10)}, -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
-    -- MatchParen   { }, -- The character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
-    -- ModeMsg      { }, -- 'showmode' message (e.g., "-- INSERT -- ")
-    -- MsgArea      { }, -- Area for messages and cmdline
-    -- MsgSeparator { }, -- Separator for scrolled messages, `msgsep` flag of 'display'
-    -- MoreMsg      { }, -- |more-prompt|
-    NonText      { fg=black}, -- '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line). See also |hl-EndOfBuffer|.
+    DiffChange   { fg=ember.da(40), bg=horror}, -- diff mode: Changed line |diff.txt|
+    DiffDelete   { fg=heat, bg=horror}, -- diff mode: Deleted line |diff.txt|
+    DiffText     { fg=heat, bg=horror}, -- diff mode: Changed text within a changed line |diff.txt|
+    EndOfBuffer  { fg=black, bg=horror}, -- filler lines (~) after the end of the buffer.  By default, this is highlighted like |hl-NonText|.
+    TermCursor   { }, -- cursor in a focused terminal
+    TermCursorNC { }, -- cursor in an unfocused terminal
+    ErrorMsg     { fg=heat, bg=ember.da(60), gui="bold"}, -- error messages on the command line
+    VertSplit    { bg=black, fg=ember.da(60) }, -- the column separating vertically split windows
+    Folded       { bg=black }, -- line used for closed folds
+    FoldColumn   { Folded }, -- 'foldcolumn'
+    SignColumn   { bg=horror, fg=soot }, -- column where |signs| are displayed
+    IncSearch    { fg=heat.li(10), bg=black.li(5) }, -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
+    Substitute   { fg=IncSearch.fg, bg=black.li(20)}, -- |:substitute| replacement text highlighting
+    LineNr       { fg=warmth, bg=horror }, -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
+    CursorLineNr { fg=ember.li(10), bg=horror}, -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
+    MatchParen   { fg=heat, bg=warmth }, -- The character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
+    ModeMsg      { fg=heat, bg=horror}, -- 'showmode' message (e.g., "-- INSERT -- ")
+    MsgArea      { bg=horror}, -- Area for messages and cmdline
+    MsgSeparator { fg=soft_ember}, -- Separator for scrolled messages, `msgsep` flag of 'display'
+    MoreMsg      { fg=soft_ember}, -- |more-prompt|
+    NonText      { fg=warmth.da(10)}, --		'@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line). See also |hl-EndOfBuffer|.
     Pmenu        { bg=black.li(5), fg=ember }, -- Popup menu: normal item.
     PmenuSel     { bg=horror, fg=cold }, -- Popup menu: selected item.
     PmenuSbar    { bg=horror}, -- Popup menu: scrollbar.
     PmenuThumb   { bg=ember }, -- Popup menu: Thumb of the scrollbar.
-    -- Question     { }, -- |hit-enter| prompt and yes/no questions
+    Question     { fg=ember, gui="bold,italic"}, -- |hit-enter| prompt and yes/no questions
     -- QuickFixLine { }, -- Current |quickfix| item in the quickfix window. Combined with |hl-CursorLine| when the cursor is there.
-    Search       { fg=heat.li(10), bg=black.li(5)}, -- Last search pattern highlighting (see 'hlsearch').  Also used for similar items that need to stand out.
+    Search       { IncSearch }, -- Last search pattern highlighting (see 'hlsearch').  Also used for similar items that need to stand out.
     -- SpecialKey   { }, -- Unprintable characters: text displayed differently from what it really is.  But not 'listchars' whitespace. |hl-Whitespace|
-    -- SpellBad     { }, -- Word that is not recognized by the spellchecker. |spell| Combined with the highlighting used otherwise. 
+    -- SpellBad     { }, -- Word that is not recognized by the spellchecker. |spell| Combined with the highlighting used otherwise.
     -- SpellCap     { }, -- Word that should start with a capital. |spell| Combined with the highlighting used otherwise.
     -- SpellLocal   { }, -- Word that is recognized by the spellchecker as one that is used in another region. |spell| Combined with the highlighting used otherwise.
     -- SpellRare    { }, -- Word that is recognized by the spellchecker as one that is hardly ever used.  |spell| Combined with the highlighting used otherwise.
     StatusLine   { fg=heat, bg=horror}, -- status line of current window
-    StatusLineNC { bg=black, fg=ember.da(50) }, -- status lines of not-current windows Note: if this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
-    TabLine      { bg=horror, fg=soot}, -- tab pages line, not active tab page label
+    StatusLineNC { bg=black, fg=soft_ember }, -- status lines of not-current windows Note: if this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
+    TabLine      { bg=horror, fg=soft_ember}, -- tab pages line, not active tab page label
     TabLineFill  { bg=horror}, -- tab pages line, where there are no labels
     TabLineSel   { bg=black, fg=ember}, -- tab pages line, active tab page label
-    Title        { }, -- titles for output from ":set all", ":autocmd" etc.
-    -- Visual       { }, -- Visual mode selection
-    -- VisualNOS    { }, -- Visual mode selection when vim is "Not Owning the Selection".
+    Title        { fg=heat, gui="bold"}, -- titles for output from ":set all", ":autocmd" etc.
+    Visual       { bg=ember.da(75)}, -- Visual mode selection
+    -- VisualNOS    { }, -- Visual mode 	selection when vim is "Not Owning the Selection".
     -- WarningMsg   { }, -- warning messages
-    Whitespace   { fg=horror}, -- "nbsp", "space", "tab" and "trail" in 'listchars'
-    -- WildMenu     { }, -- current match in 'wildmenu' completion
-
-    -- These groups are not listed as default vim groups,
-    -- but they are defacto standard group names for syntax highlighting.
-    -- commented out groups should chain up to their "preferred" group by
-    -- default,
-    -- Uncomment and edit if you want more specific syntax highlighting.
+    Whitespace   { fg=black.li(5) }, -- "nbsp", "space", "tab" and "trail" in 'listchars'
+    WildMenu     { bg=soft_ember }, -- current match in 'wildmenu' completion
 
     Parentheses { fg=black.li(20) },
 
@@ -101,10 +84,10 @@ local theme = lush(function()
     Boolean        { fg=heat }, --  a boolean constant: TRUE, false
     Float          { Constant }, --    a floating point constant: 2.3e10
 
-    Identifier     { fg=ember.da(25)}, -- (preferred) any variable name
-    Function       { fg=ember}, -- function name (also: methods for classes)
+    Identifier     { fg=flame_subtle.da(10)}, -- (preferred) any variable name
+    -- Function       { fg=ember}, -- function name (also: methods for classes)
 
-    Statement      { fg=heat }, -- (preferred) any statement
+    Statement      { fg=flame_subtle.da(30) }, -- (preferred) any statement
     -- Conditional    { fg=ember.li(10)}, --  if, then, else, endif, switch, etc.
     -- Repeat         { }, --   for, do, while, etc.
     -- Label          { }, --    case, default, etc.
@@ -112,37 +95,37 @@ local theme = lush(function()
     -- Keyword        { }, --  any other keyword
     -- Exception      { fg=heat }, --  try, catch, throw
 
-    PreProc        { fg=flame(50) }, -- (preferred) generic Preprocessor
+    PreProc        { fg=flame_subtle }, -- (preferred) generic Preprocessor
     -- Include        { fg=cold}, --  preprocessor #include
     -- Define         { }, --   preprocessor #define
     -- Macro          { }, --    same as Define
     -- PreCondit      { }, --  preprocessor #if, #else, #endif, etc.
 
-    Type           { fg=ember }, -- (preferred) int, long, char, etc.
+    Type           { fg=heat }, -- (preferred) int, long, char, etc.
     StorageClass   { }, -- static, register, volatile, etc.
     Structure      { }, --  struct, union, enum, etc.
-    Typedef        { fg=heat}, --  A typedef
+    Typedef        { fg=ember }, --  A typedef
 
     Special        { fg=ember.li(25) }, -- (preferred) any special symbol
     -- SpecialChar    { }, --  special character in a constant
     -- Tag            { }, --    you can use CTRL-] on this
     -- Delimiter      { }, --  character that needs attention
     -- SpecialComment { }, -- special things inside a comment
-    Debug          { fg=cold}, --    debugging statements
+    Debug          { fg=cold }, --    debugging statements
 
-    -- Underlined { gui = "underline" }, -- (preferred) text that stands out, HTML links
-    -- Bold       { gui = "bold" },
-    -- Italic     { gui = "italic" },
+    Underlined { gui = "underline" }, -- (preferred) text that stands out, HTML links
+    Bold       { gui = "bold" },
+    Italic     { gui = "italic" },
 
     -- ("Ignore", below, may be invisible...)
-    Ignore         {fg=black.li(10) }, -- (preferred) left blank, hidden  |hl-Ignore|
+    Ignore         {fg=warmth }, -- (preferred) left blank, hidden  |hl-Ignore|
 
     Error         { fg=heat, bg=horror}, -- (preferred) any erroneous construct
     Warn          { fg=ember.li(20), bg=black.li(5)}, -- (preferred) any erroneous construct
     Info          { Normal, bg=black}, -- (preferred) any erroneous construct
     Hint          { Normal, bg=black}, -- (preferred) any erroneous construct
 
-    Todo           { fg=heat, bg=cold.da(75).de(10)}, -- (preferred) anything that needs extra attention; mostly the keywords TODO FIXME and XXX
+    Todo           { fg=heat, bg=flame_subtle.da(70)}, -- (preferred) anything that needs extra attention; mostly the keywords TODO FIXME and XXX
 
     -- These groups are for the native LSP client and diagnostic system. Some
     -- other LSP clients may use these groups, or use their own. Consult your
@@ -256,6 +239,21 @@ local theme = lush(function()
     typescriptTypeBracket { Parentheses },
     typescriptIdentifierName { Identifier },
     typescriptProp { fg=heat },
+
+    -- stl-vim
+    stlModeMsg { bg=ember, fg=black },
+    stlLeft {fg=ember},
+    stlMid { fg=soft_ember },
+    stlRight { fg=soft_ember },
+
+    stlModeMsgNC { bg=ember.da(75), fg=soft_ember },
+    stlLeftNC {fg=soft_ember},
+    stlMidNC { fg=ember.da(70) },
+    stlRightNC { fg=soft_ember },
+
+    GitSignsAdd { DiffAdd },
+    GitSignsDelete { DiffDelete },
+    GitSignsChange { DiffChange }
   }
 end)
 
